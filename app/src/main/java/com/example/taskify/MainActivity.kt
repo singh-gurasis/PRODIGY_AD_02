@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), NotesAdapter.NotesClickListener, Popup
             val myNote = MySerializableData("note")
             intent.putExtra("myNote", myNote)
 
-            val note: MySerializableData? = intent.getSerializableExtraProvider("myNote")
+            val note: Note = intent.getSerializableExtraProvider("myNote") ?: Note(0,"","","")
             if(note != null){
                 viewModel.updateNote(note)
             }

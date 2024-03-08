@@ -16,7 +16,7 @@ class NotesRepository(private val noteDao: NoteDao) {
         noteDao.delete(note)
     }
 
-    suspend fun update(note: MainActivity.MySerializableData?){
+    suspend fun update(note: Note){
         noteDao.update(note.id, note.title, note.note)
     }
 

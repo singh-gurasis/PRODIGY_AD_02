@@ -30,7 +30,7 @@ class NoteViewModel(application: Application): AndroidViewModel(application) {
         repository.insert(note)
     }
 
-    fun updateNote(note: MainActivity.MySerializableData?) = viewModelScope.launch(Dispatchers.IO){
+    fun updateNote(note: Note) = viewModelScope.launch(Dispatchers.IO){
         repository.update(note)
     }
 

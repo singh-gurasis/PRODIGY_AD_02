@@ -6,12 +6,13 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.taskify.MainActivity
 import com.example.taskify.models.Note
 
 @Dao
 interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(note: Note)
+    suspend fun insert(note: MainActivity.MySerializableData?)
 
     @Delete
     suspend fun delete(note: Note)
