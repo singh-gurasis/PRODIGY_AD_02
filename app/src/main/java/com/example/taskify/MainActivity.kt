@@ -6,9 +6,11 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity(), NotesAdapter.NotesClickListener, Popup
     lateinit var adapter: NotesAdapter
     lateinit var selectedNote: Note
 
+    private var id: Int = 0
+
     private val updateNote = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result ->
 
         if(result.resultCode == Activity.RESULT_OK){
@@ -37,9 +41,7 @@ class MainActivity : AppCompatActivity(), NotesAdapter.NotesClickListener, Popup
             intent.putExtra("myNote", myNote)
 
             val note: Note = intent.getSerializableExtraProvider("myNote") ?: Note(0,"","","")
-            if(note != null){
-                viewModel.updateNote(note)
-            }
+            viewModel.updateNote(note)
 
         }
 
@@ -80,12 +82,9 @@ class MainActivity : AppCompatActivity(), NotesAdapter.NotesClickListener, Popup
                 val myNote = MySerializableData("note")
                 intent.putExtra("myNote", myNote)
 
-                val note: MySerializableData? = intent.getSerializableExtraProvider("myNote")
-                if(note != null){
-
-                    viewModel.insertNote(note)
-
-                }
+                val note: Note = intent.getSerializableExtraProvider("myNote") ?: Note(id,"","","")
+                id++
+                viewModel.insertNote(note)
 
             }
 

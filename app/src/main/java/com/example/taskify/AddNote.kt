@@ -5,7 +5,9 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import com.example.taskify.databinding.ActivityAddNoteBinding
 import com.example.taskify.models.Note
@@ -18,8 +20,9 @@ class AddNote : AppCompatActivity() {
     private lateinit var binding: ActivityAddNoteBinding
 
     private lateinit var note: Note
-    private lateinit var old_note: Note
+    private lateinit var oldNote: Note
     var isUpdated = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,10 +30,12 @@ class AddNote : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_note)
 
         try{
-            old_note = intent.getSerializableExtraProvider("current_note") ?: Note(0,"","","")
-            binding.etTitle.setText(old_note.title)
-            binding.etNote.setText(old_note.note)
+
+            oldNote = intent.getSerializableExtraProvider("current_note") ?: Note(0,"","","")
+            binding.etTitle.setText(oldNote.title)
+            binding.etNote.setText(oldNote.note)
             isUpdated = true
+
         }catch(e: Exception){
             e.printStackTrace()
         }
@@ -38,22 +43,22 @@ class AddNote : AppCompatActivity() {
         binding.imgCheck.setOnClickListener {
 
             val title = binding.etTitle.text.toString()
-            val note_desc = binding.etNote.text.toString()
+            val noteDesc = binding.etNote.text.toString()
 
-            if(title.isNotEmpty() || note_desc.isNotEmpty()){
+            if(title.isNotEmpty() || noteDesc.isNotEmpty()){
 
                 val formatter = SimpleDateFormat("EEE, d MMM yyyy HH:mm a")
 
-                if(isUpdated){
+                note = if(isUpdated){
 
-                    note = Note(
-                        old_note.id, title, note_desc, formatter.format(Date())
+                    Note(
+                        oldNote.id, title, noteDesc, formatter.format(Date())
                     )
 
                 }else{
 
-                    note = Note(
-                        null, title, note_desc, formatter.format(Date())
+                    Note(
+                        null, title, noteDesc, formatter.format(Date())
                     )
 
                 }
@@ -70,8 +75,15 @@ class AddNote : AppCompatActivity() {
 
             }
 
+            val callback = object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Do nothing to prevent the system back button from navigating back
+                }
+            }
+            onBackPressedDispatcher.addCallback(this, callback)
+
             binding.imgArrowBack.setOnClickListener {
-                finish()
+                onBackPressedDispatcher.onBackPressed()
             }
 
         }

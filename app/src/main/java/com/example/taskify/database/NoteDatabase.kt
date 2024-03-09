@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.taskify.models.Note
 import com.example.taskify.utilities.DATABASE_NAME
 
-@Database(entities = [Note::class], version = 1, exportSchema = false)
+@Database(entities = arrayOf(Note::class), version = 1, exportSchema = false)
 abstract class NoteDatabase: RoomDatabase() {
 
     abstract fun getNoteDao(): NoteDao
